@@ -27,7 +27,7 @@ export const fetchUserData = async (token: string) => {
 }
 
 export const getAgentPropertyTypes = async () => {
-  const response = await api.get("/api/property-types");
+  const response = await api.get("/api/enums/property-types");
   return response.data;
 };
 export const userEmailExists = async (userEmail: String) => {

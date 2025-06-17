@@ -5,12 +5,10 @@ import {
   userEmailExists,
   userPhoneNumberExists,
 } from "../api/auth";
-import { trimUserRegistrationFormData } from "../utility/ObjectTrimmer";
+import { trimUserRegistrationFormData } from "@/utility/ObjectTrimmer";
 import validator from "validator";
-import { validatePhoneNumber } from "../utility/FieldValidator";
-// import { MultiSelect } from "@/components/ui/MultiSelect";
-import { MultiSelect } from "../components/ui/MultiSelect";
-
+import { validatePhoneNumber } from "@/utility/FieldValidator";
+import { MultiSelect } from "@/components/ui/MultiSelect";
 
 interface UserRegistrationRequestData {
   firstName: string;
@@ -28,7 +26,9 @@ export const UserRegistrationForm: React.FC = () => {
   const [propertyTypeOptions, setPropertyTypeOptions] = useState<
     { label: string; value: string }[]
   >([]);
-  const [selectedOptions, setSelectedOptions] = useState<{ label: string; value: string }[]>([]);
+  const [selectedOptions, setSelectedOptions] = useState<
+    { label: string; value: string }[]
+  >([]);
   const [userRegistrationForm, setUserRegistrationForm] =
     useState<UserRegistrationRequestData>({
       firstName: "",
@@ -46,7 +46,7 @@ export const UserRegistrationForm: React.FC = () => {
     async function fetchPropertyTypes() {
       try {
         const res = await getAgentPropertyTypes();
-        const data: string[] = await res.json();
+        const data: string[] = await res;
         const formatted = data.map((type) => ({
           label: type
             .replace(/_/g, " ")
@@ -288,12 +288,14 @@ export const UserRegistrationForm: React.FC = () => {
             No
           </label>
         </div>
-        <MultiSelect
-          options={propertyTypeOptions}
-          selected={selectedOptions} // state to hold the selected values
-          onChange={(newSelected) => setSelectedOptions(newSelected)} // handler to update the state
-          placeholder="Select property types"
-        />{" "}
+        {userRegistrationForm.isAgent && (
+          <MultiSelect
+            options={propertyTypeOptions}
+            selected={selectedOptions} // state to hold the selected values
+            onChange={(newSelected) => setSelectedOptions(newSelected)} // handler to update the state
+            placeholder="Select property types"
+          />
+        )}
       </div>
       <button
         type="submit"
